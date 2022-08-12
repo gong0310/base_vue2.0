@@ -1,29 +1,57 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-
-Vue.use(VueRouter)
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../views/Home.vue";
+// hack router push callback
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location, onResolve, onReject) {
+  if (onResolve || onReject)
+    return originalPush.call(this, location, onResolve, onReject);
+  return originalPush.call(this, location).catch((err) => err);
+};
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "/",
+    name: "Home",
+    component: Home,
+    children: [
+      {
+        path: "routerA:msg",
+        name: "RouterA",
+        meta: { keepAlive: true },
+        component: () =>
+          import(/* webpackChunkName: "routerA" */ "../views/RouterA.vue"),
+      },
+      {
+        path: "routerB",
+        name: "RouterB",
+        meta: { keepAlive: true },
+        component: () =>
+          import(/* webpackChunkName: "routerB" */ "../views/RouterB.vue"),
+      },
+    ],
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
-
+    path: "/vueX",
+    name: "VueX",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/VueX.vue"),
+  },
+];
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
-
-export default router
+  routes,
+});
+router.beforeEach((to, from, next) => {
+  console.log("router.beforeEach ===>", to, from);
+  // if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' })
+  // else next()
+  next();
+});
+/*在跳转之后判断*/
+router.afterEach((to, from) => {
+  console.log("router.afterEach ===>", to, from);
+});
+export default router;
