@@ -19,7 +19,7 @@
     <button v-colorSwatch="'#ccc'">v-colorSwatch</button>
     <hr />
     <h3>filters</h3>
-    <p>{{ 1658580634000 | datefmt }}</p>
+    <p>{{ 1658580634000 | datefmt('自定义数据') }}</p>
     <hr />
     <h3 ref="inTheaters" data-type="inTheaters">ref</h3>
     <!-- <Mycom1/> -->
@@ -83,6 +83,8 @@ export default {
   filters: {
     /*将时间格式转换*/
     datefmt: function (value, formatstring) {
+      console.log('filters datefmt--->',value,formatstring)
+
       const input = new Date(value)
       var year = input.getFullYear();
       var month = input.getMonth() + 1;
@@ -181,6 +183,7 @@ export default {
   methods: {
     testMethods() {
       console.log('挂载了methods')
+      return '挂载了methods'
     },
     handleAdd() {
       this.list.unshift({ id: 4, name: "哈哈" });
