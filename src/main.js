@@ -14,7 +14,7 @@ new Vue({
 // 全局指令
 Vue.directive("aaa", {
   inserted(el) {
-    console.log("123");
+    console.log("1234");
     //元素聚焦
     el.focus();
   },
