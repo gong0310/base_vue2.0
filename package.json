@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "node beforebuild.js && vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "commit": "git add . && git-cz"
+    "commit": "git add . && git-cz",
+    "commit1": "git add . && git commit -m '111' && git push"
   },
   "dependencies": {
     "axios": "^1.6.7",
